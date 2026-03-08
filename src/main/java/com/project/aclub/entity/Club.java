@@ -35,3 +35,4 @@ public class Club {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 }
+
