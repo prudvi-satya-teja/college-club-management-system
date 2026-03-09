@@ -1,8 +1,8 @@
 package com.project.aclub.controller;
 
-import com.project.aclub.dto.ResetPasswordRequest;
-import com.project.aclub.dto.SendOtpRequest;
-import com.project.aclub.dto.VerifyOtpRequest;
+import com.project.aclub.dto.auth.ResetPasswordRequest;
+import com.project.aclub.dto.auth.SendOtpRequest;
+import com.project.aclub.dto.auth.VerifyOtpRequest;
 import com.project.aclub.service.ForgotPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

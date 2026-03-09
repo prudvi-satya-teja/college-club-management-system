@@ -1,4 +1,4 @@
-package com.project.aclub.dto;
+package com.project.aclub.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

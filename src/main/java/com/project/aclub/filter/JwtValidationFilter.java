@@ -27,7 +27,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         return path.startsWith("/login") ||
                 path.startsWith("/oauth2") ||
-                path.equals("/api/register-user") ||
+                path.equals("/api/v1/users") ||
                 path.equals("/api/forgot-password/send-otp") ||
                 path.equals("/api/forgot-password/verify-otp") ||
                 path.equals("/api/forgot-password/reset") ||

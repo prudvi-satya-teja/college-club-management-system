@@ -23,13 +23,16 @@ public class Club {
     @Column(name = "club_name", nullable = false, unique = true)
     private String clubName;
 
+    @Column(name="club_code", nullable = false, unique = true)
+    private String clubCode;
+
     @Column(name = "club_image")
     @Lob
     private byte[] clubImage;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private Timestamp createAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")

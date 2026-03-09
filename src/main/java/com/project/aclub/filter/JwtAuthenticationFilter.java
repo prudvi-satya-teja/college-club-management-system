@@ -1,7 +1,7 @@
 package com.project.aclub.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.aclub.dto.LoginRequest;
+import com.project.aclub.dto.auth.LoginRequest;
 import com.project.aclub.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
