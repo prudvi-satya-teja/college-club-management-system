@@ -50,10 +50,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authResult.isAuthenticated()) {
             String username = loginRequest.getUsername().toLowerCase();
-            String accessToken = jwtUtil.generateToken(username, 5);
+            String accessToken = jwtUtil.generateToken(username, 50);
             response.addHeader("Authorization", "Bearer " + accessToken);
 
-            String refreshToken = jwtUtil.generateToken(username, 15);
+            String refreshToken = jwtUtil.generateToken(username, 150);
             Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
             refreshTokenCookie.setPath("/refresh-token");
             refreshTokenCookie.setHttpOnly(true);

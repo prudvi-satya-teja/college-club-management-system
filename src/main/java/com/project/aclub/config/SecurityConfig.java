@@ -35,12 +35,10 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig( JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
@@ -119,19 +117,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationProvider jwtAuthenticationProvider() {
+    AuthenticationProvider jwtAuthenticationProvider(UserDetailsService userDetailsService) {
         return new JwtAuthenticationProvider(userDetailsService, jwtUtil);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(daoAuthenticationProvider(), jwtAuthenticationProvider());
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+        return new ProviderManager(daoAuthenticationProvider(userDetailsService), jwtAuthenticationProvider(userDetailsService));
     }
 
     @Bean
-    public AuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+    public AuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }

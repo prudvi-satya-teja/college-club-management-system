@@ -27,8 +27,7 @@ public class Club {
     private String clubCode;
 
     @Column(name = "club_image")
-    @Lob
-    private byte[] clubImage;
+    private String clubImage;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

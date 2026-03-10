@@ -8,13 +8,15 @@ import com.project.aclub.exception.ConflictException;
 import com.project.aclub.exception.ResourceNotFoundException;
 import com.project.aclub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,7 +40,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponse registerUser(CreateUserRequest userRequest) {
-        if (userRepository.findByEmail(userRequest.getEmail().toLowerCase()).isPresent()) {
+        if (userRepository.existsByEmail(userRequest.getEmail().toLowerCase())) {
             throw new ConflictException("User already exist with this email");
         }
 
@@ -59,9 +61,14 @@ public class UserService implements UserDetailsService {
 
     public List<UserResponse> searchUsers(String name, String rollNumber, String phoneNumber,
                                           String email, int page, int size, String sortBy, String sortDir) {
-        List<User> users = new ArrayList<>();
-        userRepository.findByEmail(email).orElseThrow(() ->
-                new ResourceNotFoundException("No user found with those details"));
+        Sort sort;
+        if (sortDir.equals("asc")) {
+            sort = Sort.by(sortBy).ascending();
+        } else {
+            sort = Sort.by(sortBy).descending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sort);
+        List<User> users = userRepository.searchUsers(name, rollNumber, phoneNumber, email, pageable);
 
         return users.stream()
                 .map(user -> UserResponse.toResponse(user))

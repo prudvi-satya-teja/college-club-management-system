@@ -1,8 +1,10 @@
 package com.project.aclub.controller;
 
-import com.project.aclub.entity.Club;
+import com.project.aclub.dto.club.ClubResponse;
+import com.project.aclub.dto.club.CreateClubRequest;
+import com.project.aclub.dto.club.UpdateClubRequest;
 import com.project.aclub.service.ClubService;
-import org.springframework.data.repository.query.Param;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/clubs")
 public class ClubController {
     private final ClubService clubService;
 
@@ -18,33 +20,34 @@ public class ClubController {
         this.clubService = clubService;
     }
 
-    @PostMapping("/club")
-    public ResponseEntity<Void> createClub(@RequestBody Club club) {
-        clubService.save(club);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PostMapping
+    public ResponseEntity<ClubResponse> registerClub(@ModelAttribute @Valid CreateClubRequest clubRequest) {
+        ClubResponse clubResponse = clubService.registerClub(clubRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clubResponse);
     }
 
-    @GetMapping("/clubs")
-    public ResponseEntity<List<Club>> fetchAllClubs() {
-        List<Club> clubs = clubService.find();
-        return ResponseEntity.status(HttpStatus.OK).body(clubs);
+    @GetMapping("/{id}")
+    public ResponseEntity<ClubResponse> getClubById(@PathVariable Long id) {
+        ClubResponse clubResponse = clubService.getClubById(id);
+        return ResponseEntity.ok(clubResponse);
     }
 
-    @GetMapping("/club/{id}")
-    public ResponseEntity<Club> findClubById(@PathVariable Long id) {
-        Club club = clubService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(club);
+    @GetMapping
+    public ResponseEntity<List<ClubResponse>> getAllClubs() {
+        List<ClubResponse> clubs = clubService.getAllClubs();
+        return ResponseEntity.ok(clubs);
     }
 
-    @DeleteMapping("/club/{id}")
+    @PutMapping("/{id}")
+    public ResponseEntity<ClubResponse> updateClubById(@PathVariable Long id,
+                                                       @ModelAttribute @Valid UpdateClubRequest clubRequest) {
+        ClubResponse clubResponse = clubService.updateClubById(id, clubRequest);
+        return ResponseEntity.ok(clubResponse);
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClubById(@PathVariable Long id) {
-        clubService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PutMapping("/club/{id}")
-    public ResponseEntity<Void> updateClubById(@PathVariable Long id, @RequestBody Club club) {
-        clubService.updateClubById(id, club);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        clubService.deleteClubById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -43,7 +43,7 @@ public class UserController {
                                                           @RequestParam(name = "email", required = false) String email,
                                                           @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size,
-                                                          @RequestParam(defaultValue = "id") String sortBy,
+                                                          @RequestParam(defaultValue = "user_id") String sortBy,
                                                           @RequestParam(defaultValue = "asc") String sortDir
     ) {
         List<UserResponse> users = userService.searchUsers(name, rollNumber, phoneNumber, email, page, size, sortBy
