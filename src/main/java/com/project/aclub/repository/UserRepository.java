@@ -1,5 +1,6 @@
 package com.project.aclub.repository;
 
+import com.project.aclub.entity.Club;
 import com.project.aclub.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             nativeQuery = true)
     List<User> searchUsers(@Param("name") String name, @Param("rollNumber") String rollNumber,
                            @Param("phoneNumber") String phoneNumber, @Param("email") String email, Pageable pageable);
+
 }
 

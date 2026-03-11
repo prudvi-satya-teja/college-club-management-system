@@ -6,12 +6,11 @@ import com.project.aclub.exception.FileUploadException;
 import com.project.aclub.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import java.io.FileNotFoundException;
-import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -31,9 +30,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FileUploadException.class)
-    public ResponseEntity<ErrorResponse> handleFileUploadException(FileUploadException ex, WebRequest request)  {
+    public ResponseEntity<ErrorResponse> handleFileUploadException(FileUploadException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), "File Upload Exception",
                 request.getDescription(false).replace("uri=", ""));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException
+            (MethodArgumentNotValidException ex, WebRequest webRequest) {
+        String errorMessage = ex.getFieldError()
+                .getDefaultMessage();
+        return buildErrorResponse(ex.getStatusCode().value(), errorMessage, "Invalid arguments",
+                webRequest.getDescription(false).replace("uri=", ""));
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(int status, String message, String error,

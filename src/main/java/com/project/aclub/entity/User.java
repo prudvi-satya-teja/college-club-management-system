@@ -1,5 +1,6 @@
 package com.project.aclub.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.aclub.Enum.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,9 +50,11 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Registration> registrations;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Participation> participation;
 

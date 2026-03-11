@@ -1,5 +1,6 @@
 package com.project.aclub.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.aclub.Enum.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,10 +22,13 @@ public class Participation {
     @Column(name = "participation_id")
     private Long id;
 
+
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
