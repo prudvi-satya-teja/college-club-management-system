@@ -19,18 +19,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
                                                                          WebRequest request) {
+
         return buildErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), "NOT_FOUND",
                 request.getDescription(false).replace("uri=", ""));
     }
 
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handleConflictException(ConflictException ex, WebRequest request) {
+
         return buildErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), "Conflict",
                 request.getDescription(false).replace("uri=", ""));
     }
 
     @ExceptionHandler(FileUploadException.class)
     public ResponseEntity<ErrorResponse> handleFileUploadException(FileUploadException ex, WebRequest request) {
+
         return buildErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), "File Upload Exception",
                 request.getDescription(false).replace("uri=", ""));
     }
@@ -40,6 +43,7 @@ public class GlobalExceptionHandler {
             (MethodArgumentNotValidException ex, WebRequest webRequest) {
         String errorMessage = ex.getFieldError()
                 .getDefaultMessage();
+
         return buildErrorResponse(ex.getStatusCode().value(), errorMessage, "Invalid arguments",
                 webRequest.getDescription(false).replace("uri=", ""));
     }

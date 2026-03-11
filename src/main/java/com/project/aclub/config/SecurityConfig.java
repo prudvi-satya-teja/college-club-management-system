@@ -38,7 +38,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public SecurityConfig( JwtUtil jwtUtil) {
+    public SecurityConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
@@ -88,9 +88,9 @@ public class SecurityConfig {
                                 "/login/oauth2/**",
                                 "/generate-token",
                                 "/refresh-token",
-                                "/api/forgot-password/send-otp",
-                                "/api/forgot-password/verify-otp",
-                                "/api/forgot-password/reset"
+                                "/api/v1/auth/otp/send",
+                                "/api/v1/auth/otp/verify",
+                                "/api/v1/auth/password/reset"
                         ).permitAll()
                         .requestMatchers("/api/users").hasRole("USER")
                         .anyRequest().authenticated()

@@ -15,13 +15,12 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "participation")
-public class Participation {
+@Table(name = "club_membership")
+public class ClubMembership {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participation_id")
+    @Column(name = "club_membership_id")
     private Long id;
-
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)

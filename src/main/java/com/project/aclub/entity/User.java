@@ -56,7 +56,7 @@ public class User implements UserDetails {
 
     @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Participation> participation;
+    private List<ClubMembership> clubMembership;
 
     @Column(name="role", nullable = false)
     private Role role = Role.USER;
@@ -72,8 +72,8 @@ public class User implements UserDetails {
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesForClub(Long clubId) {
-        if (participation == null) return List.of();
-        return participation.stream()
+        if (clubMembership == null) return List.of();
+        return clubMembership.stream()
                 .filter(p -> p.getClub().getClubId().equals(clubId))
                 .map(p -> new SimpleGrantedAuthority(p.getRole().name()))
                 .toList();

@@ -4,5 +4,6 @@ public enum Role {
     ADMIN,
     COORDINATOR,
     MEMBER,
-    USER
+    USER,
+    SUPER_ADMIN
 }

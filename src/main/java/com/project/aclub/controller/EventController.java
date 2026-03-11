@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
     private final EventService eventService;
 
-    public EventController(EventService eventService)  {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
@@ -33,11 +33,11 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<PageResponse<EventResponse>> getAllEvents(
-                                        @RequestParam(required=false) Long clubId,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "10") int size,
-                                        @RequestParam(defaultValue = "eventDateTime") String sortBy,
-                                        @RequestParam(defaultValue = "des") String sortDir) {
+            @RequestParam(required = false) Long clubId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "eventDateTime") String sortBy,
+            @RequestParam(defaultValue = "des") String sortDir) {
         System.out.println(clubId + " CLub id ");
         PageResponse<EventResponse> events = eventService.getAllEvents(clubId, page, size, sortBy, sortDir);
         return ResponseEntity.ok(events);
