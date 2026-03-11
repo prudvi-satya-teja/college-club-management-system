@@ -22,6 +22,7 @@ public class ClubController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<ClubResponse> registerClub(@ModelAttribute @Valid CreateClubRequest clubRequest) {
         ClubResponse clubResponse = clubService.registerClub(clubRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(clubResponse);
@@ -40,6 +41,7 @@ public class ClubController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<ClubResponse> updateClubById(@PathVariable Long id,
                                                        @ModelAttribute @Valid UpdateClubRequest clubRequest) {
         ClubResponse clubResponse = clubService.updateClubById(id, clubRequest);
@@ -47,6 +49,7 @@ public class ClubController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<Void> deleteClubById(@PathVariable Long id) {
         clubService.deleteClubById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

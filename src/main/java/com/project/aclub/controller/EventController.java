@@ -8,6 +8,7 @@ import com.project.aclub.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class EventController {
     }
 
     @PostMapping
+    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
     public ResponseEntity<EventResponse> registerEvent(@Valid @ModelAttribute CreateEventRequest eventRequest) {
         EventResponse eventResponse = eventService.registerEvent(eventRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventResponse);
@@ -44,12 +46,14 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@clubAuthService.isClubAdminByEventId(authentication, #eventRequest.clubId)")
     public ResponseEntity<Void> deleteEventById(@PathVariable Long id) {
         eventService.deleteEventById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
     public ResponseEntity<EventResponse> updateEventById(@PathVariable Long id,
                                                          @Valid @ModelAttribute UpdateEventRequest eventRequest) {
         EventResponse eventResponse = eventService.updateEventById(id, eventRequest);

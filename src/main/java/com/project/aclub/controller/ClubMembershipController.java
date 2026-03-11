@@ -7,6 +7,7 @@ import com.project.aclub.service.ClubMembershipService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class ClubMembershipController {
     }
 
     @PostMapping
+    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #request.clubId)")
     public ResponseEntity<ClubMembershipResponse> createClubMembership(@Valid @RequestBody
                                                                       ClubMembershipRequest request) {
         ClubMembershipResponse clubMembershipResponse = clubMembershipService.createClubMembership(request);
@@ -44,6 +46,7 @@ public class ClubMembershipController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #clubMembershipRequest.clubId)")
     public ResponseEntity<ClubMembershipResponse> updateClubMembershipById(
             @PathVariable Long id,
             @RequestBody ClubMembershipRequest clubMembershipRequest) {
@@ -53,6 +56,7 @@ public class ClubMembershipController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #id)")
     public ResponseEntity<Void> deleteClubMembershipById(@PathVariable Long id) {
         clubMembershipService.deleteClubMembershipById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
