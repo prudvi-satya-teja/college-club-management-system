@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -39,8 +38,7 @@ public class Event {
     private String details;
 
     @Column(name = "event_image")
-    @Lob
-    private byte[] image;
+    String image;
 
     @Column(name = "guest")
     private String guest;

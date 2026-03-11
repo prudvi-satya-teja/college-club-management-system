@@ -57,5 +57,4 @@ public class ParticipationController {
         participationService.deleteParticipationById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
