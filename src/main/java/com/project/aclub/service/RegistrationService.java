@@ -1,10 +1,7 @@
 package com.project.aclub.service;
 
 import com.project.aclub.dto.PageResponse;
-import com.project.aclub.dto.registration.FeedbackResponse;
-import com.project.aclub.dto.registration.RegistrationRequest;
-import com.project.aclub.dto.registration.RegistrationResponse;
-import com.project.aclub.dto.registration.UpdateRegistrationRequest;
+import com.project.aclub.dto.registration.*;
 import com.project.aclub.entity.*;
 import com.project.aclub.exception.ConflictException;
 import com.project.aclub.exception.ResourceNotFoundException;
@@ -17,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @Service
@@ -59,18 +57,25 @@ public class RegistrationService {
     }
 
     public PageResponse<RegistrationResponse> getAllRegistrations(
-            Long eventId, int page, int size, String sortBy, String sortDir) {
+            Long userId, Long eventId, int page, int size, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("asc") ?
                 Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Registration> registrationsPage;
-        if (eventId == null) {
-            registrationsPage = registrationRepository.findAll(pageable);
-        } else {
+        System.out.println("EventId : " + eventId +  " userId : " + userId);
+        if(eventId != null){
             Event event = eventRepository.findById(eventId).orElseThrow(() ->
                     new ResourceNotFoundException("Event not exists with this id"));
             registrationsPage = registrationRepository.findByEvent(event, pageable);
+        }
+        else if(userId != null) {
+            User user = userRepository.findById(userId).orElseThrow(() ->
+                    new ResourceNotFoundException("User not found with this id"));
+            registrationsPage = registrationRepository.findByUser(user, pageable);
+        }
+        else {
+            registrationsPage = registrationRepository.findAll(pageable);
         }
 
         List<RegistrationResponse> registrations = registrationsPage.stream()
@@ -124,5 +129,16 @@ public class RegistrationService {
 
         return new PageResponse<FeedbackResponse>(feedbacks, registrationsPage.getNumber(),
                 registrationsPage.getSize(), registrationsPage.getTotalPages(), registrationsPage.getTotalElements());
+    }
+
+    public FeedbackResponse saveFeedback(Long id, FeedbackRequest request) {
+        Registration registration = registrationRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Registration not exists with this id"));
+
+        registration.setRating(request.getRating());
+        registration.setFeedback(request.getMessage());
+        Registration savedRegistration = registrationRepository.save(registration);
+
+        return FeedbackResponse.toDto(savedRegistration);
     }
 }

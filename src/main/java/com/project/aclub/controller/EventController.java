@@ -46,7 +46,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@clubAuthService.isClubAdminByEventId(authentication, #eventRequest.clubId)")
+    @PreAuthorize("@clubAuthService.isClubAdminByEventId(authentication, #id)")
     public ResponseEntity<Void> deleteEventById(@PathVariable Long id) {
         eventService.deleteEventById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

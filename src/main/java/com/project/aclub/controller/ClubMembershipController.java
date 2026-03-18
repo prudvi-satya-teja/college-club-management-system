@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/club-memberships")
 public class ClubMembershipController {
@@ -45,6 +47,14 @@ public class ClubMembershipController {
         return ResponseEntity.ok(ClubMembershipResponses);
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<ClubMembershipResponse>> getMyMemberships(@PathVariable Long id) {
+        List<ClubMembershipResponse> response =
+                clubMembershipService.getMembershipsByUserId(id);
+
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #clubMembershipRequest.clubId)")
     public ResponseEntity<ClubMembershipResponse> updateClubMembershipById(
@@ -56,7 +66,7 @@ public class ClubMembershipController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #id)")
+    @PreAuthorize("@clubAuthService.isClubAdminByAuthentication(authentication)")
     public ResponseEntity<Void> deleteClubMembershipById(@PathVariable Long id) {
         clubMembershipService.deleteClubMembershipById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

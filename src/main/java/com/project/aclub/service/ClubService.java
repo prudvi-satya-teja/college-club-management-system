@@ -55,8 +55,8 @@ public class ClubService {
         Club existingClub = clubRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Club not exists with id : " + id));
 
-        if (clubRepository.existsByClubCodeOrClubNameAndClubIdNot(clubRequest.getClubCode(),
-                clubRequest.getClubName(), id)) {
+        if (clubRepository.existsByClubIdNotAndClubCodeOrClubIdNotAndClubName(id, clubRequest.getClubCode(),
+                id, clubRequest.getClubName())) {
             throw new ConflictException("Club exists with same name or code");
         }
 

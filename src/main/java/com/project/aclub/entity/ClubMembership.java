@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "club_membership")
+@Table(name = "club_membership",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"club_id", "user_id"})})
 public class ClubMembership {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +39,9 @@ public class ClubMembership {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private Timestamp updateAt;
+    private LocalDateTime updateAt;
 }

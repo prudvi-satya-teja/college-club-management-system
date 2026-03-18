@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClubRepository extends JpaRepository<Club, Long> {
 
-    boolean existsByClubCodeOrClubName(@NotBlank String clubCode, @NotBlank String clubName);
+    boolean existsByClubCodeOrClubName(String clubCode, String clubName);
 
-    boolean existsByClubCodeOrClubNameAndClubIdNot(@NotBlank String clubCode, @NotBlank String clubName, Long id);
+    boolean existsByClubIdNotAndClubCodeOrClubIdNotAndClubName(Long id, @NotBlank String clubCode, Long id1, @NotBlank String clubName);
 }

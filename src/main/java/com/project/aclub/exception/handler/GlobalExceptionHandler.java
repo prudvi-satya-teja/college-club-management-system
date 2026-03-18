@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.FORBIDDEN.value(), ex.getMessage(), "Forbidden Error",
                 request.getDescription(false).replace("uri=", ""));
     }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
                                                                          WebRequest request) {
@@ -59,7 +60,6 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponse> buildErrorResponse(int status, String message, String error,
                                                              String path) {
         ErrorResponse errorResponse = new ErrorResponse();
-
         errorResponse.setError(error);
         errorResponse.setPath(path);
         errorResponse.setMessage(message);

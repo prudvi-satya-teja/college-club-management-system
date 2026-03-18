@@ -64,6 +64,7 @@ public class EventService {
                     new ResourceNotFoundException("club with this id is not exist"));
             events = eventRepository.findByClub(club, pageable);
         }
+        System.out.println(events.toString());
 
         List<EventResponse> eventResponses = events.stream()
                 .map(event -> EventResponse.toDto(event))

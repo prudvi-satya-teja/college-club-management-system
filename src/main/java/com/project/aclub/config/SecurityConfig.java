@@ -73,7 +73,7 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter =
                 new JwtAuthenticationFilter(authenticationManager, jwtUtil);
         JwtValidationFilter jwtValidationFilter =
-                new JwtValidationFilter(jwtUtil, authenticationManager);
+                new JwtValidationFilter(authenticationManager);
         JwtRefreshFilter jwtRefreshFilter =
                 new JwtRefreshFilter(jwtUtil, authenticationManager);
 

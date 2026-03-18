@@ -41,6 +41,18 @@ public class ClubAuthService {
                 .orElse(false);
     }
 
+    public boolean isClubAdminByAuthentication(Authentication authentication) {
+        System.out.println(authentication.getPrincipal().toString());
+        User user = userRepository.findByEmail(authentication.getPrincipal().toString()).orElseThrow(()->
+                new ResourceNotFoundException("user not found with this principal"));
+
+
+        return clubMembershipRepository
+                        .findByUser(user)
+                .stream()
+                .anyMatch(m -> m.getRole() == Role.ADMIN);
+    }
+
     public boolean isClubCoordinator(Authentication authentication, Long clubId) {
         User user = (User) authentication.getPrincipal();
 
@@ -65,7 +77,7 @@ public class ClubAuthService {
                 .orElse(false);
     }
 
-    public boolean getIsClubAdminByEventId(Authentication authentication, Long eventId) {
+    public boolean isClubAdminByEventId(Authentication authentication, Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(()->
                 new ResourceNotFoundException("event not exists with this id"));
 

@@ -2,6 +2,7 @@ package com.project.aclub.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.aclub.dto.auth.LoginRequest;
+import com.project.aclub.entity.User;
 import com.project.aclub.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    public static final int ACCESS_TOKEN_TIME = 50;
+    public static final int REFRESH_TOKEN_TIME = 150;
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
@@ -23,13 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getMethod().equals("OPTIONS") ||
-                !request.getServletPath().equals("/generate-token");
-    }
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -47,13 +44,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                         loginRequest.getPassword());
         Authentication authResult = authenticationManager.authenticate(authentication);
-
+        System.out.println("auth result " + authResult.toString());
         if (authResult.isAuthenticated()) {
             String username = loginRequest.getUsername().toLowerCase();
-            String accessToken = jwtUtil.generateToken(username, 50);
+            User user = (User) authResult.getPrincipal();
+            String accessToken = jwtUtil.generateToken(username, user.getUserId(), user.getRole(), ACCESS_TOKEN_TIME);
             response.addHeader("Authorization", "Bearer " + accessToken);
 
-            String refreshToken = jwtUtil.generateToken(username, 150);
+            String refreshToken = jwtUtil.generateToken(username, user.getUserId(), REFRESH_TOKEN_TIME);
             Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
             refreshTokenCookie.setPath("/refresh-token");
             refreshTokenCookie.setHttpOnly(true);

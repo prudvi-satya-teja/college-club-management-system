@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtRefreshFilter extends OncePerRequestFilter {
+    public static final int REFRESH_TOKEN_TIME = 150;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
@@ -41,8 +42,10 @@ public class JwtRefreshFilter extends OncePerRequestFilter {
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(refreshToken);
         Authentication authResult = authenticationManager.authenticate(jwtAuthenticationToken);
 
+
         if (authResult.isAuthenticated()) {
-            String newRefreshToken = jwtUtil.generateToken(authResult.getName(), 15);
+            String newRefreshToken = jwtUtil.generateToken(authResult.getName(),
+                    jwtUtil.extractUserId(refreshToken), REFRESH_TOKEN_TIME);
             response.setHeader("Authorization", "Bearer " + newRefreshToken);
         }
     }

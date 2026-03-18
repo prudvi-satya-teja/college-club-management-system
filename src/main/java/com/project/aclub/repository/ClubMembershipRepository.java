@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,7 +19,9 @@ public interface ClubMembershipRepository extends JpaRepository<ClubMembership, 
 
     Page<ClubMembership> findClubMembershipByClub(Club club, Pageable pageable);
 
-    boolean existsByUserAndClubAndRole(User user, Club club, @NotNull(message = "role should not be empty") Role role);
+    boolean existsByUserAndClubAndRole(User user, Club club, Role role);
 
     Optional<ClubMembership> findByUserAndClub(User user, Club club);
+
+    List<ClubMembership> findByUser(User user);
 }

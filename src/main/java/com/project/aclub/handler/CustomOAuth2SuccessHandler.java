@@ -79,9 +79,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 user = userRepository.save(user);
             }
 
-            String accessToken = jwtUtil.generateToken(user.getEmail().toLowerCase(), accessTokenExpiry);
+            String accessToken = jwtUtil.generateToken(user.getEmail().toLowerCase(), user.getUserId(), accessTokenExpiry);
 
-            Cookie refreshTokenCookie = new Cookie("refreshToken", jwtUtil.generateToken(user.getEmail(), refreshTokenExpiry));
+            Cookie refreshTokenCookie = new Cookie("refreshToken", jwtUtil.generateToken(user.getEmail(), user.getUserId(), refreshTokenExpiry));
             refreshTokenCookie.setPath(cookieRefreshPath);
             refreshTokenCookie.setHttpOnly(true);
             refreshTokenCookie.setSecure(cookieSecure);

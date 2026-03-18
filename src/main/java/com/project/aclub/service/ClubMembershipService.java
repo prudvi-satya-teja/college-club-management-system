@@ -112,4 +112,15 @@ public class ClubMembershipService {
 
         clubMembershipRepository.delete(clubMembership);
     }
+
+    public List<ClubMembershipResponse> getMembershipsByUserId(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("User not exists with this id"));
+
+        List<ClubMembership> clubMemberships = clubMembershipRepository.findByUser(user);
+
+        return clubMemberships.stream()
+                .map(c->(ClubMembershipResponse.toDto(c)))
+                .toList();
+    }
 }

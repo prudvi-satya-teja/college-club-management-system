@@ -1,7 +1,6 @@
 package com.project.aclub.filter;
 
 import com.project.aclub.token.JwtAuthenticationToken;
-import com.project.aclub.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,25 +13,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtValidationFilter extends OncePerRequestFilter {
-    private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
-    public JwtValidationFilter(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
-        this.jwtUtil = jwtUtil;
+    public JwtValidationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return path.startsWith("/login") ||
-                path.startsWith("/oauth2") ||
-                path.equals("/api/v1/users") ||
-                path.equals("/api/forgot-password/send-otp") ||
-                path.equals("/api/forgot-password/verify-otp") ||
-                path.equals("/api/forgot-password/reset") ||
-                path.equals("/refresh-token") ||
-                request.getMethod().equals("OPTIONS");
     }
 
     @Override

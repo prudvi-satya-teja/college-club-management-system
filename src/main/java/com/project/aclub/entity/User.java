@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,11 +44,11 @@ public class User implements UserDetails {
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
     @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -71,11 +71,18 @@ public class User implements UserDetails {
         return this.email;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthoritiesForClub(Long clubId) {
-        if (clubMembership == null) return List.of();
-        return clubMembership.stream()
-                .filter(p -> p.getClub().getClubId().equals(clubId))
-                .map(p -> new SimpleGrantedAuthority(p.getRole().name()))
-                .toList();
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", rollNumber='" + rollNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", role=" + role +
+                '}';
     }
 }
