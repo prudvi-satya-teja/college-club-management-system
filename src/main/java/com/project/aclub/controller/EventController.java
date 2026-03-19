@@ -21,7 +21,7 @@ public class EventController {
     }
 
     @PostMapping
-    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or @clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
     public ResponseEntity<EventResponse> registerEvent(@Valid @ModelAttribute CreateEventRequest eventRequest) {
         EventResponse eventResponse = eventService.registerEvent(eventRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventResponse);
@@ -46,14 +46,14 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@clubAuthService.isClubAdminByEventId(authentication, #id)")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or @clubAuthService.isClubAdminByEventId(authentication, #id)")
     public ResponseEntity<Void> deleteEventById(@PathVariable Long id) {
         eventService.deleteEventById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
+    @PreAuthorize("hasRole('SUPER_ADMIN') or @clubAuthService.isClubAdmin(authentication, #eventRequest.clubId)")
     public ResponseEntity<EventResponse> updateEventById(@PathVariable Long id,
                                                          @Valid @ModelAttribute UpdateEventRequest eventRequest) {
         EventResponse eventResponse = eventService.updateEventById(id, eventRequest);

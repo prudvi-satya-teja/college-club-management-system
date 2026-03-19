@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:5173", "https://aclub-campus.vercel.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
@@ -92,7 +92,8 @@ public class SecurityConfig {
                                 "/refresh-token",
                                 "/api/v1/auth/otp/send",
                                 "/api/v1/auth/otp/verify",
-                                "/api/v1/auth/password/reset"
+                                "/api/v1/auth/password/reset",
+                                "/api/health"
                         ).permitAll()
                         .requestMatchers("/api/users").hasRole("USER")
                         .anyRequest().authenticated()
